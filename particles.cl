@@ -34,12 +34,16 @@ Particle( global point *dPobj, global vector *dVel, global color *dCobj )
 {
 	const float4 G       = (float4) ( 0., -9.8, 0., 0. );
 	const float  DT      = 0.1;
-	const sphere Sphere1 = (sphere)( -100., -800., 0.,  600. );
+	const sphere Sphere1 = (sphere)( -1000., -800., 0.,  600. );
+	const color sphere1color = (color)(.5f, .3f, .7f, 1.f);
+	const sphere Sphere2 = (sphere)(1000, -800, 0, 600);
+	const color sphere2color = (color)(.5f, .7f, 1.f, 1.f);
 	int gid = get_global_id( 0 );
 
 	// extract the position and velocity for this particle:
 	point  p = dPobj[gid];
 	vector v = dVel[gid];
+	color c = dCobj[gid];
 
 	// remember that you also need to extract this particle's color
 	// and change it in some way that is obviously correct
@@ -58,11 +62,18 @@ Particle( global point *dPobj, global vector *dVel, global color *dCobj )
 	{
 		vp = BounceSphere( p, v, Sphere1 );
 		pp = p + vp*DT + G*(point)( .5*DT*DT );
+		c = sphere1color;
 	}
 
 	// test against the second sphere here:
 
+	if (IsInsideSphere(pp, Sphere2)){
+		vp = BounceSphere(p, v, Sphere2);
+		pp = p + vp * DT + G * (point)(.5 * DT * DT);
+		c = sphere2color;
+	}
 
 	dPobj[gid] = pp;
 	dVel[gid]  = vp;
+	dCobj[gid] = c;
 }
