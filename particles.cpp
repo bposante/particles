@@ -17,6 +17,12 @@
 #include "glew.h"
 #endif
 
+#ifndef NMB
+#define NMB 8
+#endif
+
+#define NUM_PARTICLES NMB * 1024
+
 #define GL_GLEXT_PROTOTYPES
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -45,7 +51,6 @@ const float ZMAX = {100.0};
 const float VMIN = {-80.};
 const float VMAX = {80.};
 
-const int NUM_PARTICLES = 1024 * 1024;
 const int LOCAL_SIZE = 64;
 const char *CL_FILE_NAME = {"particles.cl"};
 const char *CL_BINARY_NAME = {"particles.nv"};
@@ -759,7 +764,7 @@ void Reset() {
   Paused = GLUIFALSE;
   Scale = 1.0;
   Scale2 = 0.0;  // because add 1. to it in Display( )
-  ShowPerformance = GLUIFALSE;
+  ShowPerformance = GLUITRUE;
   WhichProjection = PERSP;
   Xrot = Yrot = 0.;
   TransXYZ[0] = TransXYZ[1] = TransXYZ[2] = 0.;
